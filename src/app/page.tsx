@@ -4,9 +4,8 @@ import { useContext } from 'react';
 import Link from 'next/link';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
-import VideoIntro from '@/components/VideoIntro';
-import { Calendar, Users, Trophy, ArrowRight, Zap, Music, Dumbbell } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { ArrowRight, Zap, Music, Dumbbell } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { IntroContext } from '@/components/ClientLayout';
 
 export default function HomePage() {

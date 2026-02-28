@@ -66,7 +66,7 @@ export default function Footer() {
                         <ul className="space-y-4 text-gray-400 text-sm">
                             <li className="flex items-start justify-center md:justify-start space-x-3">
                                 <MapPin size={20} className="text-manthan-gold shrink-0" />
-                                <span>Bharati Vidyapeeth's Institute of Management and Information Technology (BVIMIT), Sector-8, Belapur, CBD, Navi Mumbai - 400614</span>
+                                <span>Bharati Vidyapeeth&apos;s Institute of Management and Information Technology (BVIMIT), Sector-8, Belapur, CBD, Navi Mumbai - 400614</span>
                             </li>
                             <li className="flex items-center justify-center md:justify-start space-x-3">
                                 <Phone size={18} className="text-manthan-gold shrink-0" />

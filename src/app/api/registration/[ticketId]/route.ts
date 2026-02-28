@@ -1,9 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 import { supabaseAdmin } from '@/lib/supabase/server';
 import { getEventsByIds } from '@/lib/events-catalog';
 
 export async function GET(
-    request: NextRequest,
     { params }: { params: { ticketId: string } }
 ) {
     try {
@@ -35,7 +34,7 @@ export async function GET(
             registration,
             events: events || [],
         });
-    } catch (err) {
+    } catch {
         return NextResponse.json(
             { error: 'Internal server error' },
             { status: 500 }

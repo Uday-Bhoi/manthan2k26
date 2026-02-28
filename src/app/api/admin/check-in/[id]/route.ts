@@ -69,7 +69,7 @@ export async function POST(
         }
 
         return NextResponse.json({ success: true, message: 'Checked in successfully' });
-    } catch (err) {
+    } catch {
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }

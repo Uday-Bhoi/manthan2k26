@@ -78,7 +78,7 @@ export default function AboutPage() {
                             </div>
                             <h2 className="text-2xl font-bold text-manthan-gold mb-4">The Vision</h2>
                             <p className="text-gray-400 text-sm leading-relaxed mb-4">
-                                Our theme "Roots to Realms" encapsulates our philosophy: staying grounded in our fundamental
+                                Our theme &quot;Roots to Realms&quot; encapsulates our philosophy: staying grounded in our fundamental
                                 knowledge while reaching for the infinite realms of future technology and art.
                             </p>
                             <p className="text-gray-400 text-sm leading-relaxed">

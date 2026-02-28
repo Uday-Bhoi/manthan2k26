@@ -2,7 +2,6 @@
 
 import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
@@ -18,13 +17,24 @@ import {
 import {
     ArrowLeft, ArrowRight, Check, CreditCard, AlertTriangle,
     User, Mail, Phone, Building, GraduationCap, BookOpen,
-    ShieldCheck, X
+    ShieldCheck
 } from 'lucide-react';
 
 declare global {
     interface Window {
-        Razorpay: any;
+        Razorpay?: new (options: Record<string, unknown>) => {
+            on: (event: string, handler: (response: { error?: { description?: string } }) => void) => void;
+            open: () => void;
+        };
     }
+}
+
+function getErrorMessage(error: unknown, fallback: string): string {
+    if (error instanceof Error && error.message) {
+        return error.message;
+    }
+
+    return fallback;
 }
 
 const yearOptions = ['1st Year', '2nd Year', '3rd Year', '4th Year', 'PG 1st Year', 'PG 2nd Year'];
@@ -433,8 +443,8 @@ function RegisterForm() {
 
                         setPaymentMessage('Payment verified successfully. Redirecting to your confirmation pass...');
                         router.push(`/confirmation/${verifyData.ticket_id || orderData.ticket_id}`);
-                    } catch (error: any) {
-                        setPaymentError(error.message || 'Payment verification failed.');
+                    } catch (error: unknown) {
+                        setPaymentError(getErrorMessage(error, 'Payment verification failed.'));
                     } finally {
                         setProcessing(false);
                     }
@@ -454,8 +464,8 @@ function RegisterForm() {
 
             checkout.open();
             setProcessing(false);
-        } catch (error: any) {
-            setPaymentError(error.message || 'Unable to start payment. Please try again.');
+        } catch (error: unknown) {
+            setPaymentError(getErrorMessage(error, 'Unable to start payment. Please try again.'));
             setProcessing(false);
         }
     };
@@ -600,7 +610,6 @@ function RegisterForm() {
                                     selectedEvents={selectedEvents}
                                     previewTotal={previewTotal}
                                     teamRegistrations={teamRegistrations}
-                                    processing={processing}
                                     razorpayReady={razorpayReady}
                                     paymentMessage={paymentMessage}
                                     paymentError={paymentError}
@@ -1215,7 +1224,6 @@ function PaymentStep({
     selectedEvents,
     previewTotal,
     teamRegistrations,
-    processing,
     razorpayReady,
     paymentMessage,
     paymentError,
@@ -1224,7 +1232,6 @@ function PaymentStep({
     selectedEvents: Event[];
     previewTotal: number;
     teamRegistrations: Record<string, TeamRegistration>;
-    processing: boolean;
     razorpayReady: boolean;
     paymentMessage: string;
     paymentError: string;

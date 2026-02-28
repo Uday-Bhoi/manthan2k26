@@ -121,7 +121,7 @@ export async function POST(request: NextRequest) {
                 name: adminUser.name,
             },
         });
-    } catch (err) {
+    } catch {
         return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
     }
 }

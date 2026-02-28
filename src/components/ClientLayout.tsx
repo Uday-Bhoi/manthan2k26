@@ -8,7 +8,7 @@ import { usePathname } from 'next/navigation';
 
 export const IntroContext = createContext({
     introComplete: false,
-    setIntroComplete: (val: boolean) => { }
+    setIntroComplete: (() => { }) as (val: boolean) => void,
 });
 
 export const useIntro = () => useContext(IntroContext);

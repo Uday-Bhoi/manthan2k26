@@ -68,13 +68,13 @@ export default function SponsorshipPage() {
                             className="text-gray-400 text-lg max-w-2xl mx-auto mb-10"
                         >
                             The backbone of Manthan 2026. We are honored to partner with global leaders
-                            who share our passion for technology and students' success.
+                            who share our passion for technology and students&apos; success.
                         </motion.p>
                     </div>
 
                     {/* Sponsorship Tiers */}
                     <div className="space-y-24">
-                        {sponsors.map((tier, idx) => (
+                        {sponsors.map((tier) => (
                             <motion.section
                                 key={tier.tier}
                                 initial={{ opacity: 0, y: 40 }}
@@ -92,8 +92,8 @@ export default function SponsorshipPage() {
                                 </div>
 
                                 <div className={`grid gap-6 ${tier.tier === 'Title Sponsor' ? 'grid-cols-1 max-w-md mx-auto' :
-                                        tier.tier === 'Co-Sponsors' ? 'grid-cols-1 md:grid-cols-2' :
-                                            'grid-cols-2 md:grid-cols-3'
+                                    tier.tier === 'Co-Sponsors' ? 'grid-cols-1 md:grid-cols-2' :
+                                        'grid-cols-2 md:grid-cols-3'
                                     }`}>
                                     {tier.items.map((sponsor) => (
                                         <div
