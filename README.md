@@ -1,81 +1,115 @@
-# Manthan 2026 - College Tech Fest Website
+# Manthan 2026 - Tech Fest Platform
 
-A premium, high-performance web platform designed for the **Manthan 2026** College Tech Fest. This application handles everything from event discovery to secure registration and digital ticket generation.
+Manthan is a full-stack Next.js platform for event discovery, registration, payment, admin operations, and entry-pass validation for a college tech fest.
 
 ![Manthan Logo](public/manthan_final_logo.png)
 
-## 🚀 Features
+## Features
 
--   **Cinematic UI/UX**: High-end visuals using Cormorant Unicase typography and global video backgrounds.
--   **Dynamic Event Catalog**: Browse technical, cultural, and sports events with detailed descriptions and rules.
--   **Multi-Step Registration**: A seamless, user-friendly registration flow (Basic Info → Event Selection → Payment).
--   **Razorpay Integration**: Secure payment processing with server-side validation and signature verification.
--   **Digital Entry Pass**: Automatic generation of unique Entry Passes with QR codes for event check-ins.
--   **Responsive Design**: Fully optimized for mobile, tablet, and desktop with premium aesthetics and Framer Motion animations.
--   **Admin Dashboard**: Manage registrations, check-in participants, and view real-time statistics.
+- Public event catalog (technical, cultural, sports)
+- Multi-event registration with team details and server-side fee validation
+- Razorpay order creation and secure signature verification
+- Ticket/entry pass flow with QR code generation
+- Admin module for login, registrations, check-in, stats, and cash payment marking
+- CSV export endpoint for professor/committee data sharing
+- Supabase-backed schema with RLS and performance indexes
 
-## 🛠️ Tech Stack
+## Tech Stack
 
--   **Core**: Next.js 14 (App Router), TypeScript, Tailwind CSS
--   **Typography**: Cormorant Unicase (Google Fonts)
--   **Animations**: Framer Motion, Lucide React (Icons)
--   **Backend**: Next.js API Routes (Serverless)
--   **Database**: Supabase (PostgreSQL)
--   **Payments**: Razorpay SDK
--   **QR Generation**: `qrcode` library
+- Next.js 14 (App Router)
+- TypeScript
+- Tailwind CSS
+- Supabase (PostgreSQL + Auth)
+- Razorpay
+- Framer Motion + Lucide React
+- Zod validation
 
-## 📥 Installation & Setup
+## Project Structure
 
-Follow these steps to get the project running locally on your machine.
+- src/app - Pages and API routes
+- src/components - Shared UI components
+- src/lib - Types, constants, validations, Supabase clients
+- src/lib/supabase/schema.sql - Base DB schema + policies + indexes
+- update_schema.sql - Post-deployment DB optimizations/export view
 
-### 1. Clone the Repository
-```bash
-git clone https://github.com/Uday-Bhoi/manthan.git
-cd manthan
-```
+## Environment Variables
 
-### 2. Install Dependencies
-```bash
-npm install
-```
-
-### 3. Environment Variables
-Create a `.env.local` file in the root directory and add the following keys from your Supabase and Razorpay accounts:
+Create .env.local in project root:
 
 ```env
-# Supabase Configuration
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
 NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+SUPABASE_SERVICE_ROLE_KEY=your_supabase_service_role_key
 
-# Razorpay Configuration
 NEXT_PUBLIC_RAZORPAY_KEY_ID=your_razorpay_key_id
 RAZORPAY_KEY_SECRET=your_razorpay_key_secret
 ```
 
-### 4. Database Schema
-Ensure your Supabase database has the required tables. You can use the schema provided in:
-`src/lib/supabase/schema.sql`
+## Local Setup
 
-### 5. Run the Project
 ```bash
+npm install
 npm run dev
 ```
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## 📁 Project Structure
+Useful scripts:
 
-- `src/app`: Next.js pages and API routes.
-- `src/components`: Reusable UI components.
-- `src/lib`: Utility functions, constants, and validation schemas.
-- `public`: Static assets (images, videos).
+```bash
+npm run lint
+npm run build
+npm run start
+```
 
-## ⚠️ Important Notes
+## Database Setup (Supabase)
 
--   **Background Video**: The main cinematic video `public/theme2.mp4` adds depth to the experience. Ensure this file is present in your local `public/` folder.
--   **Typography**: The font **Cormorant Unicase** is imported globally via Google Fonts in `src/app/globals.css`.
--   **Payment Mode**: By default, the payment integration is set up for Razorpay. Use Test Keys for development and Live Keys for production.
+1. Run src/lib/supabase/schema.sql in Supabase SQL Editor.
+2. Run update_schema.sql in Supabase SQL Editor.
+
+This adds:
+
+- Backward-compatible columns for registrations
+- GIN indexes for event_ids and team_registrations
+- View organized_event_registrations_export for clean export rows
+
+## Key API Routes
+
+- /api/events - Public active events
+- /api/payment/create-order - Create Razorpay order + pending registration
+- /api/payment/verify - Verify signature, mark paid, generate QR
+- /api/registration/[ticketId] - Fetch paid registration pass details
+
+Admin routes:
+
+- /api/admin/login
+- /api/admin/registrations
+- /api/admin/check-in/[id]
+- /api/admin/stats
+- /api/admin/cash-payment
+- /api/admin/cash-payment/manual
+- /api/admin/export
+
+## Export Workflow
+
+The view organized_event_registrations_export is designed for flat, sheet-friendly data. The admin export endpoint uses this view to generate CSV for faculty/committee sharing.
+
+## Deployment (Vercel)
+
+1. Set all environment variables in Vercel Project Settings.
+2. Ensure Supabase schema + update SQL are already applied.
+3. Deploy from main.
+
+Pre-deploy check:
+
+```bash
+npm run lint
+npm run build
+```
+
+## Notes
+
+- Build currently passes with non-blocking warnings about img tags (can be migrated to next/image later).
+- Payment and admin flows include compatibility handling for Supabase auth client differences.
 
 ---
 
-Built with ❤️ for Manthan 2026 by BVIMIT Team.
+Built for Manthan 2026 (BVIMIT).
