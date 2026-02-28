@@ -22,7 +22,6 @@ export default function VideoIntro({ onComplete }: VideoIntroProps) {
     const [isVisible, setIsVisible] = useState(true);
     const [isBuffering, setIsBuffering] = useState(true);
     const videoRef = useRef<HTMLVideoElement>(null);
-    const hasStartedRef = useRef(false);
 
     // Resolve source once on mount (not via state to avoid extra render)
     const videoSrc = useRef(getVideoSrc()).current;
@@ -32,28 +31,12 @@ export default function VideoIntro({ onComplete }: VideoIntroProps) {
         setTimeout(onComplete, 1000);
     }, [onComplete]);
 
-    // Play video as soon as enough data is available
-    useEffect(() => {
-        const video = videoRef.current;
-        if (!video || hasStartedRef.current) return;
-        hasStartedRef.current = true;
-
-        const onReady = () => {
+    // Called when video actually starts playing — hides spinner
+    const handleTimeUpdate = useCallback(() => {
+        if (isBuffering) {
             setIsBuffering(false);
-            video.play().catch(() => { });
-        };
-
-        // Video may already be cached and ready
-        if (video.readyState >= 3) {
-            onReady();
-        } else {
-            video.addEventListener('canplay', onReady, { once: true });
         }
-
-        return () => {
-            video.removeEventListener('canplay', onReady);
-        };
-    }, []);
+    }, [isBuffering]);
 
     // Safety fallback - skip intro if video never loads within 15s
     useEffect(() => {
@@ -90,6 +73,7 @@ export default function VideoIntro({ onComplete }: VideoIntroProps) {
                         preload="auto"
                         poster="/intro-poster.jpg"
                         src={videoSrc}
+                        onTimeUpdate={handleTimeUpdate}
                         onEnded={handleVideoEnd}
                         className="absolute top-1/2 left-1/2 min-w-[110%] min-h-[110%] w-auto h-auto object-cover"
                         style={{
