@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import VideoIntro from './VideoIntro';
 import Chatbot from './Chatbot';
 import { usePathname } from 'next/navigation';
-import { useIsMobile } from '@/lib/useIsMobile';
+
 
 export const IntroContext = createContext({
     introComplete: false,
@@ -24,7 +24,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     const videoRef = useRef<HTMLVideoElement>(null);
     const backgroundPlayedRef = useRef(false);
     const startTimeRef = useRef<number | null>(null);
-    const isMobile = useIsMobile();
 
     const bgVideoSrc = 'https://k6iphva0ugo1rocg.public.blob.vercel-storage.com/manthan/videos/theme3_hq.mp4';
 

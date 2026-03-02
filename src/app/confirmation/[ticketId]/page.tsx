@@ -8,7 +8,7 @@ import LoadingSpinner from '@/components/LoadingSpinner';
 import { Registration, Event } from '@/lib/types';
 import { formatFee, formatDate } from '@/lib/constants';
 import { CheckCircle, Download, Calendar, MapPin, Ticket, User, Mail, Phone, Building } from 'lucide-react';
-
+import Image from 'next/image';
 export default function ConfirmationPage() {
     const params = useParams();
     const ticketId = params.ticketId as string;
@@ -179,10 +179,13 @@ export default function ConfirmationPage() {
                         {/* QR Code */}
                         {registration.qr_code && (
                             <div className="p-6 text-center border-b border-manthan-gold/10">
-                                <img
+                                <Image
                                     src={registration.qr_code}
                                     alt="Entry QR Code"
-                                    className="mx-auto w-48 h-48 rounded-lg"
+                                    width={192}
+                                    height={192}
+                                    className="mx-auto rounded-lg"
+                                    unoptimized
                                 />
                                 <p className="text-gray-500 text-xs mt-2">Scan for entry verification</p>
                             </div>
