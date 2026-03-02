@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { Menu, X } from 'lucide-react';
 
 const leftLinks = [
@@ -38,9 +39,12 @@ export default function Navbar() {
                     {/* Center Logo - College Logo */}
                     <div className="flex-shrink-0 flex items-center justify-center px-4">
                         <Link href="/" className="flex flex-col items-center">
-                            <img
+                            <Image
                                 src="/bbbg-removebg-preview.png"
                                 alt="College Logo"
+                                width={64}
+                                height={64}
+                                priority
                                 className="h-16 w-auto object-contain hover:scale-105 transition-transform duration-300"
                             />
                         </Link>
@@ -70,9 +74,12 @@ export default function Navbar() {
 
                 <div className="md:hidden flex items-center justify-between h-20">
                     <Link href="/" className="flex items-center gap-3">
-                        <img
+                        <Image
                             src="/bbbg-removebg-preview.png"
                             alt="College Logo"
+                            width={48}
+                            height={48}
+                            priority
                             className="h-12 w-auto object-contain"
                         />
                         <div className="flex flex-col leading-none">

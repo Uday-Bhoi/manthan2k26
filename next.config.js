@@ -10,6 +10,20 @@ const nextConfig = {
     },
     headers: async () => [
         {
+            // Cache video files aggressively (1 year, immutable)
+            source: '/:path*.mp4',
+            headers: [
+                { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+            ],
+        },
+        {
+            // Cache images aggressively
+            source: '/:path*.(jpg|jpeg|png|webp|svg|gif)',
+            headers: [
+                { key: 'Cache-Control', value: 'public, max-age=31536000, immutable' },
+            ],
+        },
+        {
             source: '/(.*)',
             headers: [
                 { key: 'X-Frame-Options', value: 'DENY' },

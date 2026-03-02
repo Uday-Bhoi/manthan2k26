@@ -1,6 +1,7 @@
 'use client';
 
 import Navbar from '@/components/Navbar';
+import Image from 'next/image';
 import Footer from '@/components/Footer';
 import { motion } from 'framer-motion';
 import { Trophy, Star, ShieldCheck, Zap, Heart } from 'lucide-react';
@@ -103,9 +104,11 @@ export default function SponsorshipPage() {
                                             {/* Glow Effect */}
                                             <div className="absolute inset-0 bg-gradient-to-br from-manthan-gold/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                                            <img
+                                            <Image
                                                 src={sponsor.logo}
                                                 alt={sponsor.name}
+                                                width={160}
+                                                height={64}
                                                 className="max-h-16 w-auto object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-500 scale-100 group-hover:scale-110"
                                             />
 

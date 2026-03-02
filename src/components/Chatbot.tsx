@@ -9,36 +9,64 @@ interface Message {
     text: string;
     sender: 'user' | 'bot';
     timestamp: Date;
+    options?: string[];
 }
 
 const FAQS = [
     {
         keywords: ['manthan', 'what', 'fest', 'about'],
-        answer: "Manthan 2026 is our college's premier Technical and Cultural extravaganza. It's a platform where 'Roots meet Realms', showcasing the best of innovation, creativity, and talent across multiple domains."
+        answer: "Manthan 2026 is our college's premier Technical and Cultural extravaganza. It's a platform where 'Roots meet Realms', showcasing the best of innovation, creativity, and talent across multiple domains.",
+        options: ['Technical Events', 'Cultural Events', 'Sports Events', 'Registration']
     },
     {
-        keywords: ['event', 'list', 'technical', 'cultural', 'sports'],
-        answer: "We have events across three categories: Technical (Prompt2Website: The Vibe Coding Challenge, TypeSprint: The Ultimate Typing Showdown, QuizStorm: Battle of Brains, CanvaCraft: The Poster Design Challenge), Cultural (NrityaVerse, SurTarang), and Sports (Cricket, Volleyball, Indoor games). You can explore them all on our 'Events' page!"
+        keywords: ['explore events', 'view events', 'event categories', 'events & categories', 'events'],
+        answer: "We have events across three categories: Technical, Cultural, and Sports. Which one would you like to explore?",
+        options: ['Technical Events', 'Cultural Events', 'Sports Events']
     },
     {
-        keywords: ['register', 'how', 'sign up', 'apply'],
-        answer: "Registration is easy! Click the 'Register Now' button on the Navbar or any Event Detail page. It will open in a new tab and guide you through the process."
+        keywords: ['technical events', 'technical'],
+        answer: "Our Technical lineup features:\n• Prompt2Website: The Vibe Coding Challenge\n• TypeSprint: The Ultimate Typing Showdown\n• QuizStorm: Battle of Brains\n• CanvaCraft: Poster Design challenge",
+        options: ['Prompt2Website', 'TypeSprint', 'QuizStorm', 'Registration']
     },
     {
-        keywords: ['fee', 'payment', 'cost', 'amount', 'price'],
-        answer: "Each event has a specific fee, either per participant or per team. You can see exact amounts during selection. Payments are processed securely via Razorpay."
+        keywords: ['cultural events', 'cultural'],
+        answer: "Get ready for Cultural magic:\n• NrityaVerse: The Dance Extravaganza\n• SurTarang: The Singing Showdown",
+        options: ['NrityaVerse', 'SurTarang', 'Registration']
     },
     {
-        keywords: ['venue', 'location', 'where', 'address', 'bvimit'],
-        answer: "Manthan 2026 is hosted at BVIMIT (Bharati Vidyapeeth's Institute of Management and Information Technology), Sector-8, Belapur, CBD, Navi Mumbai."
+        keywords: ['sports events', 'sports'],
+        answer: "Fuel your competitive spirit with:\n• Cricket\n• Volleyball\n• Indoor Games (Chess, Carrom, etc.)",
+        options: ['Cricket', 'Volleyball', 'Indoor Games', 'Registration']
     },
     {
-        keywords: ['date', 'when', 'schedule', 'time'],
-        answer: "Manthan 2026 is scheduled for March 15th and 16th, 2026. Keep an eye on the website for the detailed hour-by-hour schedule coming soon!"
+        keywords: ['prompt2website', 'typesprint', 'quizstorm', 'canvacraft', 'nrityaverse', 'surtarang', 'cricket', 'volleyball', 'indoor games'],
+        answer: "Great choice! This event will test your skills and passion. Ready to join the battle?",
+        options: ['Registration Now', 'View More Events', 'Main Menu']
     },
     {
-        keywords: ['contact', 'help', 'support', 'email', 'number'],
-        answer: "You can reach us at manthan@bvimit.co.in or call +91 123 456 7890. Visit our 'Contact' page for more details."
+        keywords: ['registration', 'register', 'how to register', 'sign up'],
+        answer: "Registration is open! Click the button below to head to the registration portal and secure your spot in Manthan 2026.",
+        options: ['Go to Registration', 'Main Menu']
+    },
+    {
+        keywords: ['fee', 'payment', 'cost'],
+        answer: "Fees vary by event and team size. You'll see the exact amount on the registration portal before confirming.",
+        options: ['Registration', 'Contact Support']
+    },
+    {
+        keywords: ['venue', 'location', 'address'],
+        answer: "Manthan 2026 is at BVIMIT, Belapur, Navi Mumbai. It's easily accessible via Belapur railway station.",
+        options: ['Get Directions', 'Main Menu']
+    },
+    {
+        keywords: ['contact', 'help', 'support'],
+        answer: "Need direct help? Contact us at 022-27578415 or principal.bvimit@bharatividyapeeth.edu",
+        options: ['Call Now', 'Email Now', 'Main Menu']
+    },
+    {
+        keywords: ['main menu', 'hi', 'hello', 'hey', 'start', 'help'],
+        answer: "Welcome to Manthan 2026! How can I help you today?",
+        options: ['About Manthan', 'Explore Events', 'Registration', 'Venue & Contact']
     }
 ];
 
@@ -50,7 +78,8 @@ export default function Chatbot() {
             id: '1',
             text: "Hello! I'm the Manthan Assistant. How can I help you today?",
             sender: 'bot',
-            timestamp: new Date()
+            timestamp: new Date(),
+            options: ['About Manthan', 'Explore Events', 'Registration', 'Contact Us']
         }
     ]);
     const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -63,12 +92,13 @@ export default function Chatbot() {
         if (isOpen) scrollToBottom();
     }, [messages, isOpen]);
 
-    const handleSend = () => {
-        if (!input.trim()) return;
+    const handleSend = (text?: string) => {
+        const messageText = text || input;
+        if (!messageText.trim()) return;
 
         const userMessage: Message = {
             id: Date.now().toString(),
-            text: input,
+            text: messageText,
             sender: 'user',
             timestamp: new Date()
         };
@@ -78,12 +108,14 @@ export default function Chatbot() {
 
         // Process Bot Response
         setTimeout(() => {
-            const query = input.toLowerCase();
+            const query = messageText.toLowerCase();
             let responseText = "Sorry, I can only help with Manthan Fest related queries. Please ask about events, registration, fees, venue, or schedule.";
+            let options: string[] | undefined = ['About Manthan', 'Explore Events', 'Contact Us'];
 
             for (const faq of FAQS) {
                 if (faq.keywords.some(keyword => query.includes(keyword))) {
                     responseText = faq.answer;
+                    options = faq.options;
                     break;
                 }
             }
@@ -92,7 +124,8 @@ export default function Chatbot() {
                 id: (Date.now() + 1).toString(),
                 text: responseText,
                 sender: 'bot',
-                timestamp: new Date()
+                timestamp: new Date(),
+                options: options
             };
 
             setMessages(prev => [...prev, botMessage]);
@@ -138,17 +171,34 @@ export default function Chatbot() {
                                     key={msg.id}
                                     className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
                                 >
-                                    <div className={`flex gap-2.5 max-w-[85%] ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
-                                        <div className={`w-7 h-7 rounded-sm flex items-center justify-center shrink-0 mt-1 ${msg.sender === 'user' ? 'bg-manthan-gold/10' : 'bg-manthan-maroon/20'
-                                            }`}>
-                                            {msg.sender === 'user' ? <User size={14} className="text-manthan-gold" /> : <Bot size={14} className="text-manthan-maroon" />}
+                                    <div className={`flex flex-col gap-2 max-w-[85%] ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}>
+                                        <div className={`flex gap-2.5 ${msg.sender === 'user' ? 'flex-row-reverse' : 'flex-row'}`}>
+                                            <div className={`w-7 h-7 rounded-sm flex items-center justify-center shrink-0 mt-1 ${msg.sender === 'user' ? 'bg-manthan-gold/10' : 'bg-manthan-maroon/20'
+                                                }`}>
+                                                {msg.sender === 'user' ? <User size={14} className="text-manthan-gold" /> : <Bot size={14} className="text-manthan-maroon" />}
+                                            </div>
+                                            <div className={`p-3 rounded-xl text-xs sm:text-sm leading-relaxed whitespace-pre-wrap ${msg.sender === 'user'
+                                                ? 'bg-manthan-gold/10 text-gray-200 rounded-tr-none'
+                                                : 'bg-white/5 text-gray-300 rounded-tl-none border border-white/5'
+                                                }`}>
+                                                {msg.text}
+                                            </div>
                                         </div>
-                                        <div className={`p-3 rounded-xl text-xs sm:text-sm leading-relaxed ${msg.sender === 'user'
-                                            ? 'bg-manthan-gold/10 text-gray-200 rounded-tr-none'
-                                            : 'bg-white/5 text-gray-300 rounded-tl-none border border-white/5'
-                                            }`}>
-                                            {msg.text}
-                                        </div>
+
+                                        {/* Predefined Buttons */}
+                                        {msg.sender === 'bot' && msg.options && (
+                                            <div className="flex flex-wrap gap-2 mt-1 ml-9">
+                                                {msg.options.map((option) => (
+                                                    <button
+                                                        key={option}
+                                                        onClick={() => handleSend(option)}
+                                                        className="px-3 py-1.5 rounded-full bg-manthan-gold/5 border border-manthan-gold/20 text-[10px] sm:text-xs text-manthan-gold hover:bg-manthan-gold/10 hover:border-manthan-gold/40 transition-all duration-300"
+                                                    >
+                                                        {option}
+                                                    </button>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             ))}
@@ -167,7 +217,7 @@ export default function Chatbot() {
                                     className="w-full bg-white/[0.03] border border-white/10 rounded-full py-2.5 pl-4 pr-12 text-sm text-gray-200 placeholder:text-gray-600 focus:outline-none focus:border-manthan-gold/30 transition-all font-body"
                                 />
                                 <button
-                                    onClick={handleSend}
+                                    onClick={() => handleSend()}
                                     disabled={!input.trim()}
                                     className="absolute right-1.5 p-2 text-manthan-gold hover:text-manthan-gold-light disabled:opacity-30 disabled:hover:text-manthan-gold transition-all"
                                 >

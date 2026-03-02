@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { Mail, Phone, MapPin, Instagram, Youtube, Facebook, Linkedin } from 'lucide-react';
+import { Mail, Phone, MapPin, Globe, Instagram, Youtube, Facebook, Linkedin } from 'lucide-react';
 
 export default function Footer() {
     return (
@@ -62,7 +62,7 @@ export default function Footer() {
 
                     {/* Contact Info */}
                     <div className="text-center md:text-left">
-                        <h4 className="text-manthan-gold font-bold uppercase tracking-widest text-sm mb-6">Location</h4>
+                        <h4 className="text-manthan-gold font-bold uppercase tracking-widest text-sm mb-6">Contact Us</h4>
                         <ul className="space-y-4 text-gray-400 text-sm">
                             <li className="flex items-start justify-center md:justify-start space-x-3">
                                 <MapPin size={20} className="text-manthan-gold shrink-0" />
@@ -70,11 +70,19 @@ export default function Footer() {
                             </li>
                             <li className="flex items-center justify-center md:justify-start space-x-3">
                                 <Phone size={18} className="text-manthan-gold shrink-0" />
-                                <span>+91 123 456 7890</span>
+                                <div className="flex flex-col md:flex-row md:space-x-2">
+                                    <a href="tel:02227578415" className="hover:text-manthan-gold transition-colors duration-300">022-27578415</a>
+                                    <span className="hidden md:inline">,</span>
+                                    <a href="tel:+918657008016" className="hover:text-manthan-gold transition-colors duration-300">+91 8657008016</a>
+                                </div>
+                            </li>
+                            <li className="flex items-center justify-center md:justify-start space-x-3">
+                                <Globe size={18} className="text-manthan-gold shrink-0" />
+                                <a href="https://www.bvimit.co.in" target="_blank" rel="noopener noreferrer" className="hover:text-manthan-gold transition-colors duration-300">www.bvimit.co.in</a>
                             </li>
                             <li className="flex items-center justify-center md:justify-start space-x-3">
                                 <Mail size={18} className="text-manthan-gold shrink-0" />
-                                <span>manthan@bvimit.co.in</span>
+                                <a href="mailto:principal.bvimit@bharatividyapeeth.edu" className="hover:text-manthan-gold transition-colors duration-300">principal.bvimit@bharatividyapeeth.edu</a>
                             </li>
                         </ul>
                     </div>

@@ -2,6 +2,7 @@
 
 import { useContext } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import { ArrowRight, Zap, Music, Dumbbell } from 'lucide-react';
@@ -36,9 +37,12 @@ export default function HomePage() {
                             transition={{ delay: 0.5, duration: 0.8 }}
                             className="mb-6 flex justify-center"
                         >
-                            <img
+                            <Image
                                 src="/manthan_final_logo.png"
                                 alt="Manthan 2026"
+                                width={500}
+                                height={200}
+                                priority
                                 className="w-full max-w-[320px] md:max-w-[500px] h-auto object-contain drop-shadow-[0_0_30px_rgba(212,168,55,0.3)]"
                             />
                         </motion.div>
