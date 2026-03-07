@@ -30,8 +30,6 @@ export default function HomePage() {
         { title: "Badminton", category: "Sports", description: "Outdoor sports challenge" },
     ];
 
-    const bgVideoUrl = "https://manthan-cdn.ameyabhagat24.workers.dev/extended.mp4";
-
     return (
         <motion.div
             initial={{ opacity: 0 }}
@@ -40,24 +38,6 @@ export default function HomePage() {
             className={`${introComplete ? "block" : "hidden"} bg-transparent overflow-x-hidden`}
         >
             <Navbar />
-
-            {/* Background Video Layer */}
-            <div className="fixed inset-0 -z-10 w-full h-full">
-                <video
-                    autoPlay
-                    loop
-                    muted
-                    playsInline
-                    className="w-full h-full object-cover opacity-40"
-                    poster="/video-poster.jpg"
-                    onLoadedData={(e) => {
-                        e.currentTarget.playbackRate = 0.5;
-                    }}
-                >
-                    <source src={bgVideoUrl} type="video/mp4" />
-                </video>
-                <div className="absolute inset-0 bg-black/40" />
-            </div>
 
             <main className="bg-transparent">
 

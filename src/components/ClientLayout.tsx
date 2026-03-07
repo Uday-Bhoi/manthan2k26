@@ -23,62 +23,53 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     const [bgVideoReady, setBgVideoReady] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
     const backgroundPlayedRef = useRef(false);
-    const startTimeRef = useRef<number | null>(null);
+    const restartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
-    const bgVideoSrc = '/bg_best_vid.mp4';
+    const bgVideoSrc = 'https://manthan-cdn.ameyabhagat24.workers.dev/extended.mp4';
+    const targetOpacity = isLandingPage ? 0.46 : 0.34;
+    const loopFadeOpacity = isLandingPage ? 0.28 : 0.22;
 
-    // Sync timing and handle manual loop fading
+    // Fade near the natural end of the clip so final frames are always visible.
     const handleTimeUpdate = () => {
         const video = videoRef.current;
         if (video) {
-            const loopPoint = 5.0; // User requested 5s duration
-            const fadePoint = 1.0; // 1s fade in/out
+            const duration = video.duration;
+            const fadeDuration = 0.25;
+            if (!Number.isFinite(duration) || duration <= 0) return;
 
-            // Fade out starts at loopPoint - fadePoint
-            if (video.currentTime >= loopPoint - fadePoint && video.currentTime < loopPoint) {
-                if (!isLoopFading) setIsLoopFading(true);
-            }
-
-            // Force reset if it exceeds 5s
-            if (video.currentTime >= loopPoint) {
-                video.currentTime = 0;
-                video.play().catch(() => { });
+            if (video.currentTime >= duration - fadeDuration && video.currentTime < duration) {
+                if (!isLoopFading) {
+                    setIsLoopFading(true);
+                }
+            } else if (isLoopFading && video.currentTime < duration - fadeDuration) {
                 setIsLoopFading(false);
-            }
-
-            // Normal operation outside fade zone
-            if (video.currentTime < loopPoint - fadePoint && video.currentTime > fadePoint) {
-                if (isLoopFading) setIsLoopFading(false);
             }
         }
     };
 
     const handleVideoLoop = () => {
-        if (videoRef.current) {
-            const video = videoRef.current;
+        const video = videoRef.current;
+        if (!video) return;
+
+        setIsLoopFading(true);
+
+        if (restartTimeoutRef.current) {
+            clearTimeout(restartTimeoutRef.current);
+        }
+
+        restartTimeoutRef.current = setTimeout(() => {
             video.currentTime = 0;
             video.play().catch(() => { });
             setIsLoopFading(false);
-        }
+        }, 280);
     };
 
     useEffect(() => {
-        // Sync video timing with wall-clock to ensure it "progresses" in the background
-        const syncVideo = () => {
-            if (document.visibilityState === 'visible' && startTimeRef.current && videoRef.current) {
-                const video = videoRef.current;
-                const totalElapsed = (Date.now() - startTimeRef.current) / 1000;
-                const seekTime = totalElapsed % 5.0; // Loop every 5s
-
-                if (Math.abs(video.currentTime - seekTime) > 0.5) {
-                    video.currentTime = seekTime;
-                    video.play().catch(() => { });
-                }
+        return () => {
+            if (restartTimeoutRef.current) {
+                clearTimeout(restartTimeoutRef.current);
             }
         };
-
-        document.addEventListener('visibilitychange', syncVideo);
-        return () => document.removeEventListener('visibilitychange', syncVideo);
     }, []);
 
     useEffect(() => {
@@ -91,9 +82,11 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
             }
             const onCanPlay = () => {
                 setBgVideoReady(true);
-                video.play().then(() => {
-                    if (!startTimeRef.current) startTimeRef.current = Date.now();
-                }).catch(() => { });
+                // Add delay to ensure intro fade is completely finished
+                setTimeout(() => {
+                    video.currentTime = 0; // Ensure it starts from beginning
+                    video.play().catch(() => { });
+                }, 900); // Delay keeps transition smooth after intro exits
                 video.removeEventListener('canplay', onCanPlay);
             };
             video.addEventListener('canplay', onCanPlay);
@@ -126,9 +119,11 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
                 tabIndex={-1}
                 onTimeUpdate={handleTimeUpdate}
                 onEnded={handleVideoLoop}
-                className={`fixed top-1/2 left-1/2 min-w-[110%] min-h-[110%] w-auto h-auto object-cover transition-all duration-[1000ms] ease-in-out ${(introComplete || !isLandingPage) && !isLoopFading && bgVideoReady ? 'opacity-40' : 'opacity-0'
-                    } pointer-events-none bg-black`}
+                className="fixed top-1/2 left-1/2 min-w-[110%] min-h-[110%] w-auto h-auto object-cover transition-opacity duration-200 ease-out pointer-events-none bg-black"
                 style={{
+                    opacity: (introComplete || !isLandingPage) && bgVideoReady
+                        ? (isLoopFading ? loopFadeOpacity : targetOpacity)
+                        : 0,
                     height: '110svh',
                     width: '110vw',
                     objectFit: 'cover',
