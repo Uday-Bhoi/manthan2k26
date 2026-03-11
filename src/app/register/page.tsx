@@ -11,7 +11,7 @@ import {
     formatFee,
     categoryIcons,
 } from '@/lib/constants';
-import { ArrowLeft, ArrowRight, User, Mail, Phone, Building, GraduationCap, BookOpen, Check, CreditCard, Sparkles, Filter, Info, Trash2, Plus, Minus, Search, ShieldCheck, AlertTriangle } from 'lucide-react';
+import { ArrowLeft, ArrowRight, User, Mail, Phone, Building, GraduationCap, BookOpen, Check, CreditCard, ShieldCheck, AlertTriangle } from 'lucide-react';
 import ScrollWrapper from '@/components/ScrollWrapper';
 
 declare global {

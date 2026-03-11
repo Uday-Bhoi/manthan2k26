@@ -31,41 +31,6 @@ export default function EventsFilter({ events }: { events: Event[] }) {
         };
     }, [activeCategory, events]);
 
-    const containerVariants = {
-        closed: { opacity: 0.8 },
-        open: {
-            opacity: 1,
-            transition: {
-                staggerChildren: 0.08,
-                delayChildren: 0.1
-            }
-        }
-    };
-
-    const itemVariants = {
-        closed: { opacity: 0, y: 15 },
-        open: { 
-            opacity: 1, 
-            y: 0,
-            transition: { duration: 0.4, ease: "easeOut" }
-        }
-    };
-
-    const parchmentVariants = {
-        closed: { 
-            opacity: 0,
-            scaleY: 0.98,
-            transformOrigin: 'top'
-        },
-        open: { 
-            opacity: 1,
-            scaleY: 1,
-            transition: { 
-                duration: 0.4, 
-                ease: [0.22, 1, 0.36, 1] 
-            } 
-        }
-    };
 
     return (
         <>

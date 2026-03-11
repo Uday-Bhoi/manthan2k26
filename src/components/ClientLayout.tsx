@@ -23,7 +23,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     const [isPreloading, setIsPreloading] = useState(isLandingPage); // Only preload if on landing page
     const [isLoopFading, setIsLoopFading] = useState(false);
     const [bgVideoReady, setBgVideoReady] = useState(false);
-    const [isAppMounted, setIsAppMounted] = useState(false);
     const videoRef = useRef<HTMLVideoElement>(null);
     const backgroundPlayedRef = useRef(false);
     const restartTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -33,7 +32,6 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
     const loopFadeOpacity = 0.28;
 
     useEffect(() => {
-        setIsAppMounted(true);
 
         if (!isLandingPage) {
             setIsPreloading(false);
